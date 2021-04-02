@@ -3,6 +3,7 @@ package ru.geekbrains.moviesearch.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ru.geekbrains.moviesearch.R
+import ru.geekbrains.moviesearch.view.main.ListFilmsFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +14,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.layout_container, ListFilmsFragment.newInstance())
-                .commitNow()
+                .commit()
         }
     }
 }

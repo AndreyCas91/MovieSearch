@@ -1,4 +1,4 @@
-package ru.geekbrains.moviesearch.view
+package ru.geekbrains.moviesearch.view.main
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +9,7 @@ import com.google.android.material.textview.MaterialTextView
 import ru.geekbrains.moviesearch.model.Genre
 import ru.geekbrains.moviesearch.R
 
-class WholeListAdapter : RecyclerView.Adapter<WholeListAdapter.ViewHolder>() {
+class WholeListAdapter(private var onItemViewClickListener: ListFilmsFragment.OnItemViewClickListener?) : RecyclerView.Adapter<WholeListAdapter.ViewHolder>() {
 
     private val listGenres: ArrayList<Genre> = ArrayList()
 
@@ -19,9 +19,15 @@ class WholeListAdapter : RecyclerView.Adapter<WholeListAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
+    fun removeListener() {
+        onItemViewClickListener = null
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_list_films, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(
+            view
+        )
     }
 
     override fun getItemCount(): Int {
@@ -29,20 +35,20 @@ class WholeListAdapter : RecyclerView.Adapter<WholeListAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.onBind(listGenres[position], position)
+        holder.onBind(listGenres[position])
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private lateinit var textView: MaterialTextView
         private lateinit var recyclerView: RecyclerView
-        private val adapter: ListAdapter = ListAdapter()
+        private val adapter: ListAdapter = ListAdapter(onItemViewClickListener)
 
-        fun onBind(item: Genre, position: Int){
+        fun onBind(item: Genre){
             initView()
 
             textView.text = item.genre
-            adapter.setItems(item.arrayFilm)
+            adapter.setItems(item.listFilm)
         }
 
         private fun initView(){

@@ -1,4 +1,4 @@
-package ru.geekbrains.moviesearch.view
+package ru.geekbrains.moviesearch.view.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import ru.geekbrains.moviesearch.R
 import ru.geekbrains.moviesearch.model.ArrayFilms
 import ru.geekbrains.moviesearch.databinding.FragmentListFilmsBinding
+import ru.geekbrains.moviesearch.model.Film
+import ru.geekbrains.moviesearch.view.details.DetailsFragment
 import ru.geekbrains.moviesearch.viewmodel.AppState
 import ru.geekbrains.moviesearch.viewmodel.MainViewModel
 
@@ -18,7 +21,22 @@ class ListFilmsFragment : Fragment(){
     private var _binding: FragmentListFilmsBinding? = null
     private val binding get() = _binding!!
 
-    private val adapter: WholeListAdapter = WholeListAdapter()
+    private val adapter: WholeListAdapter =
+        WholeListAdapter(object : OnItemViewClickListener {
+            override fun onItemViewClick(film: Film) {
+                val manager = activity?.supportFragmentManager
+                if(manager != null)
+                {
+                    val bundle = Bundle()
+                    bundle.putParcelable(DetailsFragment.BUNDLE_KEY, film)
+                    manager.beginTransaction()
+                            .replace(R.id.layout_container, DetailsFragment.newInstance(bundle))
+                            .addToBackStack(null)
+                            .commit()
+                }
+            }
+
+        })
 
     private lateinit var viewModel: MainViewModel
 
@@ -34,7 +52,12 @@ class ListFilmsFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initTest()
+        initAdapter()
+    }
+
+    override fun onDestroy() {
+        adapter.removeListener()
+        super.onDestroy()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -49,6 +72,7 @@ class ListFilmsFragment : Fragment(){
             is AppState.Success -> {
                 setData(data.filmData)
             }
+            //Загрузку и ошибку пока не реализовал
         }
     }
 
@@ -56,7 +80,7 @@ class ListFilmsFragment : Fragment(){
         adapter.setItems(filmData.arrayFilms)
     }
 
-    private fun initTest(){
+    private fun initAdapter(){
         binding.rvFragmentListFilms.layoutManager = LinearLayoutManager(this.context)
         binding.rvFragmentListFilms.adapter = adapter
     }
@@ -67,6 +91,11 @@ class ListFilmsFragment : Fragment(){
     }
 
     companion object {
-        fun newInstance() = ListFilmsFragment()
+        fun newInstance() =
+            ListFilmsFragment()
+    }
+
+    interface OnItemViewClickListener{
+        fun onItemViewClick(film : Film)
     }
 }
