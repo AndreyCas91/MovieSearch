@@ -1,4 +1,4 @@
-package ru.geekbrains.moviesearch.view
+package ru.geekbrains.moviesearch.view.main
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,7 @@ import com.google.android.material.textview.MaterialTextView
 import ru.geekbrains.moviesearch.model.Film
 import ru.geekbrains.moviesearch.R
 
-class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+class ListAdapter(private var onItemViewClickListener: ListFilmsFragment.OnItemViewClickListener?) : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     private val ListFilms: ArrayList<Film> = ArrayList()
 
@@ -28,16 +28,20 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.onBind(ListFilms.get(position), position)
+        holder.onBind(ListFilms[position])
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         lateinit var textView: MaterialTextView
 
-        fun onBind(item: Film, position: Int) {
+        fun onBind(item: Film) {
             initView()
 
             textView.text = item.name
+
+            itemView.setOnClickListener {
+                onItemViewClickListener?.onItemViewClick(item)
+            }
         }
 
         fun initView() {

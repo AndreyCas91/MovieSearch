@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="16dp">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:id="@+id/verticalLine"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        tools:ignore="MissingConstraints"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_details_name"
+        android:layout_width="match_parent"
+        style="@style/MyStyleForTV"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_details"
+        app:layout_constraintStart_toStartOf="parent"
+
+        tools:text="Проверка"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_details_year"
+        android:layout_width="172dp"
+        style="@style/MyStyleForTV"
+        app:layout_constraintTop_toBottomOf="@id/tv_details_name"
+        app:layout_constraintStart_toEndOf="@id/verticalLine"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        tools:text="Проверка"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_field_year"
+        android:layout_width="172dp"
+        style="@style/MyStyleForTVField"
+        android:text="Год выпуска:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_details_name"
+        app:layout_constraintEnd_toStartOf="@id/verticalLine"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_field_rank"
+        android:layout_width="172dp"
+        style="@style/MyStyleForTVField"
+        android:text="Рейтинг:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_field_year"
+        app:layout_constraintEnd_toStartOf="@id/verticalLine"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_details_rank"
+        android:layout_width="172dp"
+        style="@style/MyStyleForTV"
+        app:layout_constraintStart_toEndOf="@id/verticalLine"
+        app:layout_constraintTop_toBottomOf="@id/tv_details_year"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        tools:text="Проверка"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_details_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/MyStyleForTV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_field_rank"
+
+        tools:text="test test test test test test test test test test test test проверка проверка проверка проверка проверка проверка проверка "/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
