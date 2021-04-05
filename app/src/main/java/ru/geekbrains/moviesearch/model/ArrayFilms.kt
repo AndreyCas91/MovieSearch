@@ -6,17 +6,13 @@ import kotlin.collections.ArrayList
 
 @Parcelize
 data class ArrayFilms(
-    val arrayFilms: List<Genre> = getDefaultArrayFilms()
+        val arrayFilms: List<Genre> = listOf(
+                Genre("ужасы", getDefaultListFilm("ужасы")),
+                Genre("комедия", getDefaultListFilm("комедия")),
+                Genre("триллер", getDefaultListFilm("триллер")),
+                Genre("драма", getDefaultListFilm("драма"))
+        )
 ) : Parcelable
-
-fun getDefaultArrayFilms() = ArrayList<Genre>(
-    listOf(
-        Genre("ужасы", getDefaultListFilm("ужасы")),
-        Genre("комедия", getDefaultListFilm("комедия")),
-        Genre("триллер", getDefaultListFilm("триллер")),
-        Genre("драма", getDefaultListFilm("драма"))
-    )
-)
 
 fun getDefaultListFilm(str: String) = ArrayList<Film>(
     listOf(
