@@ -13,6 +13,10 @@ class DetailsFragment : Fragment() {
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
 
+    private val listFilm: Film? by lazy {
+        arguments?.getParcelable<Film>(BUNDLE_KEY)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,12 +28,11 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val listFilm = arguments?.getParcelable<Film>(BUNDLE_KEY)
-        if(listFilm != null){
-            binding.tvDetailsName.text = listFilm.name
-            binding.tvDetailsYear.text = listFilm.year.toString()
-            binding.tvDetailsRank.text = listFilm.rank.toString()
-            binding.tvDetailsDescription.text = listFilm.description
+        listFilm?.apply{
+            binding.tvDetailsName.text = this.name
+            binding.tvDetailsYear.text = this.year.toString()
+            binding.tvDetailsRank.text = this.rank.toString()
+            binding.tvDetailsDescription.text = this.description
         }
     }
 
