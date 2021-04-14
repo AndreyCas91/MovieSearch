@@ -6,16 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.geekbrains.moviesearch.databinding.FragmentDetailsBinding
+import ru.geekbrains.moviesearch.model.ArrayFilms
 import ru.geekbrains.moviesearch.model.Film
 
 class DetailsFragment : Fragment() {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
+    private lateinit var filmBundle: ArrayFilms
 
-    private val listFilm: Film? by lazy {
-        arguments?.getParcelable<Film>(BUNDLE_KEY)
-    }
+    private val onLoadListener : FilmsLoaderListener =
+        object : FilmsLoaderListener{
+            override fun onLoaded() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onFailed() {
+                TODO("Not yet implemented")
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,12 +37,10 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listFilm?.apply{
-            binding.tvDetailsName.text = this.name
-            binding.tvDetailsYear.text = this.year.toString()
-            binding.tvDetailsRank.text = this.rank.toString()
-            binding.tvDetailsDescription.text = this.description
-        }
+        filmBundle = arguments?.getParcelable(BUNDLE_KEY) ?: ArrayFilms()
+
+        val loader = FilmsLoader(onLoadListener)
+        loader.loadFilms()
     }
 
     override fun onDestroy() {
