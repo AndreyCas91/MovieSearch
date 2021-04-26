@@ -6,16 +6,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
-import ru.geekbrains.moviesearch.model.Genre
 import ru.geekbrains.moviesearch.R
+import ru.geekbrains.moviesearch.model.ArrayFilmsDTO
+import ru.geekbrains.moviesearch.model.GenreDTO
 
-class WholeListAdapter(private var onItemViewClickListener: ListFilmsFragment.OnItemViewClickListener?) : RecyclerView.Adapter<WholeListAdapter.ViewHolder>() {
+class WholeListAdapter(private var onItemViewClickListener: ListFilmsFragment.OnItemViewClickListener?) : RecyclerView.Adapter<WholeListAdapter.WholeListViewHolder>() {
 
-    private val listGenres: ArrayList<Genre> = ArrayList()
+    private val listGenre: ArrayList<GenreDTO> = ArrayList()
 
-    fun setItems(item: List<Genre>){
-        listGenres.clear()
-        listGenres.addAll(item)
+    fun setItemsGenre(item: List<GenreDTO>){
+        listGenre.clear()
+        listGenre.addAll(item)
         notifyDataSetChanged()
     }
 
@@ -23,32 +24,47 @@ class WholeListAdapter(private var onItemViewClickListener: ListFilmsFragment.On
         onItemViewClickListener = null
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WholeListViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_list_films, parent, false)
-        return ViewHolder(
-            view
-        )
+        return WholeListViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return listGenres.size
+        return listGenre.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.onBind(listGenres[position])
+    override fun onBindViewHolder(holder: WholeListViewHolder, position: Int) {
+        holder.onBind(listGenre[position])
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class WholeListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        private val onLoadListenerFilms : ArrayFilmsLoader.FilmsLoaderListener =
+                object : ArrayFilmsLoader.FilmsLoaderListener{
+                    override fun onLoaded(arrayFilmsDTO: ArrayFilmsDTO) {
+                        arrayFilmsDTO.results?.let { adapter.setItems(it) }
+                    }
+
+                    override fun onFailed(throwable: Throwable) {
+
+                    }
+                }
 
         private lateinit var textView: MaterialTextView
         private lateinit var recyclerView: RecyclerView
         private val adapter: ListAdapter = ListAdapter(onItemViewClickListener)
 
-        fun onBind(item: Genre){
+        fun onBind(item: GenreDTO){
             initView()
 
-            textView.text = item.genre
-            adapter.setItems(item.listFilm)
+            textView.text = item.name
+
+            item.id?.let { initLoader(it) }
+        }
+
+        private fun initLoader(item: Int){
+            val loader = ArrayFilmsLoader(onLoadListenerFilms, item)
+            loader.loadArrayFilms()
         }
 
         private fun initView(){
